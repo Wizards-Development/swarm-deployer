@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.0</version>
+        <version>4.1.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>ch.lucnelmr</groupId>
@@ -43,8 +43,8 @@
     </developers>
     <properties>
         <java.version>21</java.version>
-        <javaformat>0.0.47</javaformat>
-        <jgit>7.7.1.202607240634-r</jgit>
+        <javaformat>0.0.48</javaformat>
+        <jgit>7.8.0.202609011348-r</jgit>
         <docker-java>3.7.1</docker-java>
     </properties>
     <dependencies>
