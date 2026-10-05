@@ -179,7 +179,7 @@ A deployer running as a Swarm service cannot deploy its own stack: it would stop
 
 ## Versioning
 
-[Semantic Versioning](https://semver.org). Changes are listed in [CHANGELOG.md](CHANGELOG.md). A GitHub release publishes the version of its tag.
+[Semantic Versioning](https://semver.org). Changes are listed in [CHANGELOG.md](CHANGELOG.md). A GitHub release publishes the version of its tag (`.github/workflows/publish.yml`). Run by hand from `master` with a version, it republishes that tag with the current workflow.
 
 ## Contributing
 

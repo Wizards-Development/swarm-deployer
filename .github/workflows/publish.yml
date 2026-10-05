@@ -1,12 +1,16 @@
 name: Publish
 
+# A GitHub release publishes the library on GitHub Packages, at the version of its
+# tag. Self-contained on purpose: a public repository can neither call the
+# organisation's private shared workflows nor run on its self-hosted runner.
+
 on:
   release:
     types: [published]
   workflow_dispatch:
     inputs:
       version:
-        description: "Version / tag à publier"
+        description: "Version to publish, e.g. 0.2.0"
         required: true
         type: string
 
@@ -16,8 +20,27 @@ permissions:
 
 jobs:
   publish:
-    uses: Wizards-Development/shared-workflows/.github/workflows/maven-library.yml@master
-    with:
-      version: ${{ github.event.release.tag_name || inputs.version }}
-      # Public repository: never on the self-hosted runner.
-      runs-on: ubuntu-latest
+    runs-on: ubuntu-latest
+    steps:
+      # The tag's code, also when run by hand: the workflow comes from the branch it
+      # is started on, the published code from the version's tag.
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.release.tag_name || inputs.version }}
+
+      # The JDK, and a settings.xml whose `github` server, the pom's
+      # distributionManagement, reads GITHUB_ACTOR and GITHUB_TOKEN.
+      - uses: actions/setup-java@v6
+        with:
+          distribution: temurin
+          java-version: '21'
+          server-id: github
+          settings-path: ${{ runner.temp }}
+
+      - name: Set version
+        run: ./mvnw -B versions:set -DnewVersion=${{ github.event.release.tag_name || inputs.version }} -DgenerateBackupPoms=false
+
+      - name: Test and publish
+        run: ./mvnw -B -s "$RUNNER_TEMP/settings.xml" deploy
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
