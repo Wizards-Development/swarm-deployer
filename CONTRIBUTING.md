@@ -28,6 +28,6 @@ The build checks the formatting ([Spring Java Format](https://github.com/spring-
 - Keep the public API stable. A breaking change waits for a major version and is called out in [CHANGELOG.md](CHANGELOG.md).
 - Add a line under *Unreleased* in [CHANGELOG.md](CHANGELOG.md).
 - Commit messages follow [Conventional Commits](https://www.conventionalcommits.org): `feat:`, `fix:`, `docs:`, `chore:`…
-- **Only the maintainer merges.** CI must pass, and the code owners must approve.
+- **Only the maintainer merges.** CI must pass, and the code owners must approve. These rules are versioned in [`.github/rulesets`](.github/rulesets).
 
 By submitting a pull request, you agree that your contribution is licensed under the [Apache License 2.0](LICENSE).

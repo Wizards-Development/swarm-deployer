@@ -1,12 +1,22 @@
 version: 2
 updates:
+  # Minor and patch versions in one pull request; a major version gets its own.
   - package-ecosystem: maven
     directory: /
     schedule:
       interval: weekly
-    open-pull-requests-limit: 5
+    groups:
+      maven:
+        patterns: ["*"]
+        update-types: [minor, patch]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: weekly
+    # Private reusable workflows, followed on master: nothing for Dependabot to update.
+    ignore:
+      - dependency-name: "Wizards-Development/shared-workflows*"
+    groups:
+      actions:
+        patterns: ["*"]
