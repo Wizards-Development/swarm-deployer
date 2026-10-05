@@ -1,0 +1,16 @@
+name: Feature request
+description: A use case the library does not cover yet.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use case
+      description: What are you deploying, and what is missing?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: How you would see it work, if you have an idea.

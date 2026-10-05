@@ -10,9 +10,18 @@
     </parent>
     <groupId>ch.lucnelmr</groupId>
     <artifactId>swarm-deployer</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0</version>
     <name>swarm-deployer</name>
-    <description>Deploys the stacks of a git repository on Docker Swarm: shared by swarm-service and hortiprobes-supervisor</description>
+    <description>GitOps for Docker Swarm: follows a branch, renders its stacks with values and sealed secrets, and deploys them in order</description>
+    <url>https://github.com/Wizards-Development/swarm-deployer</url>
+    <scm>
+        <url>https://github.com/Wizards-Development/swarm-deployer</url>
+        <connection>scm:git:https://github.com/Wizards-Development/swarm-deployer.git</connection>
+    </scm>
+    <issueManagement>
+        <system>GitHub</system>
+        <url>https://github.com/Wizards-Development/swarm-deployer/issues</url>
+    </issueManagement>
     <licenses>
         <license>
             <name>Apache License, Version 2.0</name>

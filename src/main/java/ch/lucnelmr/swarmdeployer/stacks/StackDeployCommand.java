@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -40,16 +42,21 @@ public class StackDeployCommand {
 
 	private final Convergence convergence;
 
+	private final RemovedServices removedServices;
+
 	private final Duration timeout;
 
 	/**
 	 * @param convergence {@link Convergence#DETACHED} returns once Swarm has the new
 	 * spec, {@link Convergence#AWAITED} once every service has converged, health checks
 	 * included
+	 * @param removedServices what happens to a service still running in the stack but
+	 * gone from its file
 	 * @param timeout how long the command may run
 	 */
-	public StackDeployCommand(Convergence convergence, Duration timeout) {
+	public StackDeployCommand(Convergence convergence, RemovedServices removedServices, Duration timeout) {
 		this.convergence = convergence;
+		this.removedServices = removedServices;
 		this.timeout = timeout;
 	}
 
@@ -60,8 +67,7 @@ public class StackDeployCommand {
 		Process process;
 
 		try {
-			ProcessBuilder builder = new ProcessBuilder("docker", "stack", "deploy", "--with-registry-auth",
-					this.convergence.flag, "-c", composeFile.toAbsolutePath().toString(), name)
+			ProcessBuilder builder = new ProcessBuilder(command(composeFile, name))
 				.directory(composeFile.getParent().toFile())
 				.redirectErrorStream(true);
 			builder.environment().putAll(environment);
@@ -90,6 +96,16 @@ public class StackDeployCommand {
 		}
 	}
 
+	List<String> command(Path composeFile, String name) {
+		List<String> command = new ArrayList<>(
+				List.of("docker", "stack", "deploy", "--with-registry-auth", this.convergence.flag));
+		if (this.removedServices == RemovedServices.PRUNED) {
+			command.add("--prune");
+		}
+		command.addAll(List.of("-c", composeFile.toAbsolutePath().toString(), name));
+		return command;
+	}
+
 	public enum Convergence {
 
 		DETACHED("--detach"), AWAITED("--detach=false");
@@ -99,6 +115,21 @@ public class StackDeployCommand {
 		Convergence(String flag) {
 			this.flag = flag;
 		}
+
+	}
+
+	public enum RemovedServices {
+
+		/**
+		 * Left running: a service deleted from the stack file outlives it until removed
+		 * by hand.
+		 */
+		KEPT,
+
+		/**
+		 * Removed by the deploy (--prune): the stack is exactly what its file says.
+		 */
+		PRUNED
 
 	}
 

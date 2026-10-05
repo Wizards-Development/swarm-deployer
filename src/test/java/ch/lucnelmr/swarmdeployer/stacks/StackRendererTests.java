@@ -54,16 +54,16 @@ class StackRendererTests {
 
 	@Test
 	void movesTheNameWhenASubstitutionChanges() throws IOException {
-		String before = stampedName(Map.of("domain", "dev.hortiprod.ch"));
+		String before = stampedName(Map.of("domain", "dev.example.org"));
 
-		assertThat(stampedName(Map.of("domain", "hortiprod.ch"))).isNotEqualTo(before).startsWith("gatus_config_v1-");
+		assertThat(stampedName(Map.of("domain", "example.org"))).isNotEqualTo(before).startsWith("gatus_config_v1-");
 	}
 
 	@Test
 	void leavesAnUnresolvedPlaceholderAloneInsteadOfFailing() throws IOException {
 		Files.writeString(this.stack.resolve("README.md"), "Ce noeud est {{nodename}}.\n");
 
-		StackRenderer.Rendered rendered = this.renderer.render(this.stack, "gatus", Map.of("domain", "hortiprod.ch"));
+		StackRenderer.Rendered rendered = this.renderer.render(this.stack, "gatus", Map.of("domain", "example.org"));
 
 		assertThat(Files.readString(rendered.directory().resolve("README.md"))).contains("{{nodename}}");
 		assertThat(rendered.unresolved()).hasSize(1);
@@ -76,7 +76,7 @@ class StackRendererTests {
 		Files.writeString(this.stack.resolve("stack.yaml"),
 				"hostname: \"{{.Node.Hostname}}\"\npassword: '" + sealed + "'\n");
 
-		StackRenderer.Rendered rendered = this.renderer.render(this.stack, "gatus", Map.of("domain", "hortiprod.ch"));
+		StackRenderer.Rendered rendered = this.renderer.render(this.stack, "gatus", Map.of("domain", "example.org"));
 
 		assertThat(Files.readString(rendered.directory().resolve("stack.yaml")))
 			.isEqualTo("hostname: \"{{.Node.Hostname}}\"\npassword: 'hunter2'\n");
@@ -97,14 +97,14 @@ class StackRendererTests {
 		byte[] blob = { 1, 0, '{', '{', 'd', 'o', 'm', 'a', 'i', 'n', '}', '}' };
 		Files.write(this.stack.resolve("blob.bin"), blob);
 
-		StackRenderer.Rendered rendered = this.renderer.render(this.stack, "gatus", Map.of("domain", "hortiprod.ch"));
+		StackRenderer.Rendered rendered = this.renderer.render(this.stack, "gatus", Map.of("domain", "example.org"));
 
 		assertThat(Files.readAllBytes(rendered.directory().resolve("blob.bin"))).isEqualTo(blob);
 	}
 
 	@Test
 	void deletesTheRenderedCopy() throws IOException {
-		StackRenderer.Rendered rendered = this.renderer.render(this.stack, "gatus", Map.of("domain", "hortiprod.ch"));
+		StackRenderer.Rendered rendered = this.renderer.render(this.stack, "gatus", Map.of("domain", "example.org"));
 
 		StackRenderer.delete(rendered.directory());
 

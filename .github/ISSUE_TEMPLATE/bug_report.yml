@@ -1,0 +1,29 @@
+name: Bug report
+description: Something does not work as documented.
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: And what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: How to reproduce
+      description: The smallest stack, values and code that show it. Never paste real secrets or `{cipher}` values.
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: swarm-deployer version
+      placeholder: 0.2.0
+    validations:
+      required: true
+  - type: input
+    id: docker
+    attributes:
+      label: Docker version (docker version --format '{{.Server.Version}}')

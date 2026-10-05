@@ -19,3 +19,5 @@ jobs:
     uses: Wizards-Development/shared-workflows/.github/workflows/maven-library.yml@master
     with:
       version: ${{ github.event.release.tag_name || inputs.version }}
+      # Public repository: never on the self-hosted runner.
+      runs-on: ubuntu-latest

@@ -56,7 +56,7 @@ class EncryptionServiceTests {
 
 	@Test
 	void stillOpensValuesFromTheOldEcbScheme() throws Exception {
-		assertThat(this.encryptionService.decrypt(legacyEcb("infomaniak-token", SECRET))).isEqualTo("infomaniak-token");
+		assertThat(this.encryptionService.decrypt(legacyEcb("legacy-token", SECRET))).isEqualTo("legacy-token");
 	}
 
 	@Test
@@ -95,7 +95,7 @@ class EncryptionServiceTests {
 
 	@Test
 	void leavesAFileWithoutMarkersAlone() {
-		String content = "image: ghcr.io/wizards-development/waxhub-service:0.1.8\n";
+		String content = "image: ghcr.io/example/app:1.0.0\n";
 
 		assertThat(this.encryptionService.containsEncryptedValues(content)).isFalse();
 		assertThat(this.encryptionService.decryptContent(content)).isEqualTo(content);
