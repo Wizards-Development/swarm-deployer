@@ -43,7 +43,7 @@
     </developers>
     <properties>
         <java.version>21</java.version>
-        <javaformat>0.0.47</javaformat>
+        <javaformat>0.0.48</javaformat>
         <jgit>7.7.1.202607240634-r</jgit>
         <docker-java>3.7.1</docker-java>
     </properties>
